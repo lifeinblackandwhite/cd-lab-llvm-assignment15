@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLVM Pipeline Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blob"></div>
+    <div class="background-blob blob-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1>LLVM Pipeline Dashboard</h1>
+            <p>Real-time execution, validation, and semantic repair metrics</p>
+        </header>
+
+        <section class="overview">
+            <div class="card stat-card">
+                <h3>Total Tests</h3>
+                <div class="stat-value" id="stat-total">--</div>
+            </div>
+            <div class="card stat-card success">
+                <h3>Passed (Syntax)</h3>
+                <div class="stat-value" id="stat-passed">--</div>
+            </div>
+            <div class="card stat-card error">
+                <h3>Failed</h3>
+                <div class="stat-value" id="stat-failed">--</div>
+            </div>
+            <div class="card stat-card success">
+                <h3>Semantic Correct</h3>
+                <div class="stat-value" id="stat-sem-correct">--</div>
+            </div>
+            <div class="card stat-card error">
+                <h3>Semantic Wrong</h3>
+                <div class="stat-value" id="stat-sem-wrong">--</div>
+            </div>
+        </section>
+
+        <div class="details-container">
+            <section class="test-list card">
+                <h2>Test Cases</h2>
+                <div class="list-header">
+                    <span>Name</span>
+                    <span>Status</span>
+                    <span>Semantic</span>
+                    <span>Attempts</span>
+                </div>
+                <ul id="tests-ul">
+                    <li class="loading">Loading data...</li>
+                </ul>
+            </section>
+
+            <section class="repair-list card">
+                <h2>AI Repair Loop</h2>
+                <div class="list-header">
+                    <span>Error Injected</span>
+                    <span>Status</span>
+                    <span>Attempts</span>
+                </div>
+                <ul id="repairs-ul">
+                    <li class="loading">Loading data...</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

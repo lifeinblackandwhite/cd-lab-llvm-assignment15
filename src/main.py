@@ -455,4 +455,8 @@ with open("outputs/results.txt", "w") as f:
         if r["status"] == "FAIL":
             f.write(f"  {r['error_category']}\n")
 
-print("\n📄 Results saved to outputs/results.txt")
+import json
+with open("outputs/main_results.json", "w") as f:
+    json.dump({"tests": results, "summary": {"passed": len(passed), "failed": len(failed), "total": len(results)}}, f, indent=4)
+
+print("\n📄 Results saved to outputs/results.txt and outputs/main_results.json")

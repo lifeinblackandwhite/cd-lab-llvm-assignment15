@@ -37,3 +37,10 @@ This project is an automated pipeline that generates, validates, and runs LLVM I
    ./run.sh
    ```
    Check the `outputs/` directory for generated `.ll` files and the comprehensive `results.txt`.
+
+4. **View the Dashboard**
+   You can view a rich, glassmorphism web dashboard of your test outcomes and AI repair results by starting the local server:
+   ```bash
+   ./serve_dashboard.sh
+   ```
+   Then open `http://localhost:8000/dashboard/` in your browser.

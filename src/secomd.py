@@ -576,4 +576,18 @@ with open("outputs/results.txt", "w") as f:
     for error_type, r in repair_results.items():
         f.write(f"{error_type}: {r['status']} | attempts: {r['attempts']}\n")
 
-print("\n📄 Results saved to outputs/results.txt")
+import json
+with open("outputs/secomd_results.json", "w") as f:
+    json.dump({
+        "tests": results,
+        "repair_results": repair_results,
+        "summary": {
+            "passed": len(passed),
+            "failed": len(failed),
+            "total": len(results),
+            "semantically_correct": correct,
+            "semantically_wrong": wrong
+        }
+    }, f, indent=4)
+
+print("\n📄 Results saved to outputs/results.txt and outputs/secomd_results.json")
