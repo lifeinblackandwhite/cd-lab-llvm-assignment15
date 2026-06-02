@@ -1,6 +1,9 @@
 import subprocess
 import os
 import tempfile
+import anthropic
+
+client = anthropic.Anthropic()
 
 # ── expected outputs ───────────────────────────────────
 

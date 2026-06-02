@@ -1,60 +1,39 @@
 # LLVM IR Generation and Validation Pipeline
 
-This project is an automated pipeline that generates, validates, and runs LLVM Intermediate Representation (IR) from various C code snippets. It leverages the LLVM toolchain (`clang`, `llvm-as`, `lli`) through Python, and integrates with Anthropic's Claude API to automatically categorize and analyze validation failures.
+## What This Is
+This project is an automated pipeline that generates, validates, and runs LLVM Intermediate Representation (IR) from C code snippets using a Python orchestrator. It uses the LLVM toolchain (`clang`, `llvm-as`, `lli`) and features a semantic correctness checker and an AI-assisted failure analysis loop (powered by Anthropic's Claude API).
 
-## Project Structure
-
-- `assignment15/`: Contains the core Python scripts.
-  - `main.py`: The main testing pipeline that compiles C code, validates IR, and triggers AI analysis on failure.
-  - `secomd.py`: Additional script (ensure to check its specific functionality).
-- `myvenv/`: The recommended Python virtual environment location (ignored by git).
-- `outputs/`: Directory where generated LLVM IR files, reference C files, and execution results are saved (ignored by git).
-
-## Features
-
-- **IR Generation**: Uses `clang` to compile C code into LLVM IR (`.ll`).
-- **Validation**: Checks the validity of the generated IR using `llvm-as`.
-- **Execution**: If the IR is valid, runs it directly using `lli`.
-- **AI-Powered Failure Analysis**: When LLVM validation fails, the script queries the Claude API to classify the error (e.g., `SSA_VIOLATION`, `TYPE_ERROR`, etc.) and explains the reason.
-- **Comprehensive Test Suite**: Contains tests ranging from basic arithmetic and loops to complex pointers and struct operations to stress-test the generation and validation flow.
+## Repository Structure
+- `src/`: Core Python pipeline scripts (`main.py` and `secomd.py`).
+- `testcases/`: Contains raw C and LLVM IR reference test files.
+- `scripts`: (Provided as `./build.sh` and `./run.sh` in the root directory).
+- `outputs/`: Automatically generated directory for LLVM IR outputs and test results.
+- `DESIGN.md`: Architecture, approaches, and alternatives considered.
+- `IMPLEMENTATION.md`: Specific technical details of the LLVM tools and python hooks.
+- `EVALUATION.md`: Metrics, semantic tests, and evaluation outcomes.
 
 ## Prerequisites
-
 - **Python 3.7+**
-- **LLVM Toolchain**: Ensure `clang`, `llvm-as`, and `lli` are installed and available in your system's `PATH`.
-- **Anthropic SDK**: Required for the failure analysis feature.
+- **LLVM Toolchain**: `clang`, `llvm-as`, and `lli` must be installed.
+- **Anthropic API Key**: Needed for failure analysis and the repair loop.
 
-## Setup Instructions
+## How to Run
 
-1. **Activate the Virtual Environment:**
+1. **Build the Environment**
+   Run the build script to set up a virtual environment (`myvenv`) and install dependencies (`anthropic`):
    ```bash
-   source myvenv/bin/activate
-   ```
-   *(If `myvenv` doesn't exist, create it with `python -m venv myvenv`)*
-
-2. **Install Dependencies:**
-   Ensure the Anthropic Python SDK is installed in your environment:
-   ```bash
-   pip install anthropic
+   ./build.sh
    ```
 
-3. **Set Environment Variables:**
-   The failure analysis requires an Anthropic API key to function:
+2. **Set API Key**
+   Export your Anthropic API key to enable AI-powered analysis:
    ```bash
-   export ANTHROPIC_API_KEY="your-anthropic-api-key"
+   export ANTHROPIC_API_KEY="your-api-key"
    ```
 
-## Usage
-
-To execute the pipeline and run all C tests:
-
-```bash
-cd assignment15
-python main.py
-```
-
-### Outputs
-
-After execution, check the `outputs/` folder or `assignment15/outputs/` for the generated files:
-- `*.ll` generated LLVM IR files.
-- `results.txt`: A detailed summary of tests that passed, failed, and the categorization of errors for failed tests.
+3. **Run the Pipeline**
+   Execute both the standard validation tests and the semantic repair loop using the run script:
+   ```bash
+   ./run.sh
+   ```
+   Check the `outputs/` directory for generated `.ll` files and the comprehensive `results.txt`.
