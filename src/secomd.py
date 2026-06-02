@@ -63,12 +63,13 @@ def generate_ir(c_code: str) -> str:
 
 def repair_ir(ir_code: str, error: str) -> str:
     print("🔧 Attempting repair...")
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=1000,
-        messages=[{
-            "role": "user",
-            "content": f"""This LLVM IR has an error. Fix it.
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=1000,
+            messages=[{
+                "role": "user",
+                "content": f"""This LLVM IR has an error. Fix it.
 
 Error from llvm-as:
 {error}
@@ -77,9 +78,12 @@ Broken IR:
 {ir_code}
 
 Output ONLY the fixed LLVM IR, nothing else."""
-        }]
-    )
-    return response.content[0].text
+            }]
+        )
+        return response.content[0].text
+    except Exception as e:
+        print(f"⚠️ API Error during repair: {e}")
+        return ir_code
 
 def analyze_failure(ir_code: str, error: str) -> str:
     return "UNKNOWN"

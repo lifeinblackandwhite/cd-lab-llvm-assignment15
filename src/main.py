@@ -65,12 +65,13 @@ def get_reference_ir(c_code: str, name: str) -> str:
 
 def analyze_failure(ir_code: str, error: str) -> str:
     """Ask Claude to categorize what kind of error occurred."""
-    response = client.messages.create(
-        model="claude-sonnet-4-20250514",
-        max_tokens=500,
-        messages=[{
-            "role": "user",
-            "content": f"""This LLVM IR failed validation. Categorize the failure.
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=500,
+            messages=[{
+                "role": "user",
+                "content": f"""This LLVM IR failed validation. Categorize the failure.
 
 Error:
 {error}
@@ -82,9 +83,11 @@ Reply in this exact format:
 CATEGORY: (one of: SSA_VIOLATION, TYPE_ERROR, MISSING_TERMINATOR, INVALID_CONTROL_FLOW, UNDEFINED_VALUE, OTHER)
 REASON: (one sentence explaining what went wrong)
 FIXABLE: (YES or NO — can this be fixed with a simple repair)"""
-        }]
-    )
-    return response.content[0].text
+            }]
+        )
+        return response.content[0].text
+    except Exception as e:
+        return f"CATEGORY: OTHER\nREASON: API Error: {e}\nFIXABLE: NO"
 
 
 def pipeline(name: str, c_code: str, max_retries=3):
