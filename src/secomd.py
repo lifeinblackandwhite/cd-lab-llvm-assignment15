@@ -61,11 +61,22 @@ def generate_ir(c_code: str) -> str:
             os.remove(temp_ll_file)
 
 
+def strip_code_fences(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        lines = text.split("\n")
+        lines = lines[1:]  # remove opening fence line
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
+    return text
+
+
 def repair_ir(ir_code: str, error: str) -> str:
     print("🔧 Attempting repair...")
     try:
         response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=1000,
             messages=[{
                 "role": "user",
@@ -80,7 +91,7 @@ Broken IR:
 Output ONLY the fixed LLVM IR, nothing else."""
             }]
         )
-        return response.content[0].text
+        return strip_code_fences(response.content[0].text)
     except Exception as e:
         print(f"⚠️ API Error during repair: {e}")
         return ir_code

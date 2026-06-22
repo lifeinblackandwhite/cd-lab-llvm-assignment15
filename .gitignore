@@ -42,3 +42,20 @@ outputs/
 
 # OS
 .DS_Store
+
+# Documentation / Research
+problem_Statement_methodology
+problem_statement_methodology.md
+DESIGN.md
+design.md
+EL_Report.docx
+el_report.docx
+IMPLEMENTATION.md
+implementation.md
+EVALUATION.md
+evaluation.md
+PROJECT_OVERVIEW.md
+project_overview.md
+presentation.md
+LLVM_Project_Report.docx
+llvm_project_report.docx

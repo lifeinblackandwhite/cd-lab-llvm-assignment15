@@ -32,10 +32,40 @@ def generate_ir(c_code: str) -> str:
         if os.path.exists(temp_ll_file):
             os.remove(temp_ll_file)
 
+def strip_code_fences(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        lines = text.split("\n")
+        lines = lines[1:]  # remove opening fence line
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        text = "\n".join(lines).strip()
+    return text
+
+
 def repair_ir(ir_code: str, error: str) -> str:
-    # Since we're using clang, this shouldn't be needed, but return the code as-is
-    print("🔧 Unable to repair - using clang for generation")
-    return ir_code
+    print("🔧 Attempting repair...")
+    try:
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1000,
+            messages=[{
+                "role": "user",
+                "content": f"""This LLVM IR has an error. Fix it.
+
+Error from llvm-as:
+{error}
+
+Broken IR:
+{ir_code}
+
+Output ONLY the fixed LLVM IR, nothing else."""
+            }]
+        )
+        return strip_code_fences(response.content[0].text)
+    except Exception as e:
+        print(f"⚠️ API Error during repair: {e}")
+        return ir_code
 
 def validate_ir(ir_code: str, filename: str):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -67,7 +97,7 @@ def analyze_failure(ir_code: str, error: str) -> str:
     """Ask Claude to categorize what kind of error occurred."""
     try:
         response = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-6",
             max_tokens=500,
             messages=[{
                 "role": "user",

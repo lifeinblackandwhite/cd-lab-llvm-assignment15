@@ -19,28 +19,35 @@ This project is an automated pipeline that generates, validates, and runs LLVM I
 
 ## How to Run
 
-1. **Build the Environment**
-   Run the build script to set up a virtual environment (`myvenv`) and install dependencies (`anthropic`):
+1. **Make Scripts Executable**
+   Ensure the provided bash scripts have execute permissions:
+   ```bash
+   chmod +x build.sh run.sh serve_dashboard.sh
+   ```
+
+2. **Build the Environment**
+   Run the build script to set up a virtual environment (`myvenv`) and install Python dependencies (e.g., `anthropic`):
    ```bash
    ./build.sh
    ```
 
-2. **Set API Key**
-   Export your Anthropic API key to enable AI-powered analysis:
+3. **Set API Key**
+   Export your Anthropic API key to enable the AI-powered semantic repair analysis:
    ```bash
    export ANTHROPIC_API_KEY="your-api-key"
    ```
 
-3. **Run the Pipeline**
+4. **Run the Automated Pipeline**
    Execute both the standard validation tests and the semantic repair loop using the run script:
    ```bash
    ./run.sh
    ```
    Check the `outputs/` directory for generated `.ll` files and the comprehensive `results.txt`.
 
-4. **View the Dashboard**
-   You can view a rich, glassmorphism web dashboard of your test outcomes and AI repair results by starting the local server:
+5. **View the Dashboard (Interactive Code-to-IR)**
+   You can view a rich web dashboard displaying test outcomes. It also features a real-time interactive compiler where you can paste C code and instantly view the generated LLVM IR!
+   Start the local server:
    ```bash
    ./serve_dashboard.sh
    ```
-   Then open `http://localhost:8000/dashboard/` in your browser.
+   Then open `http://localhost:8000/dashboard/` in your browser to interact with the LLVM pipeline.
